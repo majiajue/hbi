@@ -16,3 +16,10 @@ $ pip list
 $ pip install django
 $ pip install xadmin-django2.zip
 $ pip install pymysql
+$ pip install sqlparse
+
+$ python manage.py migrate
+$ python manage.py runserver 0:8000
+
+创建一个管理员账号
+$ python manage.py createsuperuser
