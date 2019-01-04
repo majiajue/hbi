@@ -29,7 +29,7 @@ $ cat /etc/redhat-release
 	* git: git2.20.1
 	* mysql: mysql5.7.23
 	* redis: redis5.0.3
-	* node.js: node-v8.5.0
+	* nginx: nginx1.15.8
   
 一.git安装
 $ wget https://github.com/git/git/archive/v2.20.1.zip 
@@ -159,6 +159,54 @@ $ redis-cli -h 127.0.0.1 -p 6379
 > del hello
 > exit
 
+五.nginx安装
+官网：http://nginx.org/en/linux_packages.html
+$ sudo yum -y install gcc gcc-c++ autoconf pcre pcre-devel make automake 
+$ sudo yum -y install wget httpd-tools vim
+
+# 检查
+$ yum list | grep gcc
+
+# 安装配置（新建文件）
+$ sudo vim /etc/yum.repos.d/nginx.repo 
+[nginx] 
+name=nginx repo 
+baseurl=http://nginx.org/packages/mainline/rhel/7/$basearch/ 
+gpgcheck=0 
+enabled=1
+
+# 安装
+$ sudo yum -y install nginx
+
+# 检查是否安装成功
+$ whereis nginx
+
+# 启动nginx
+$ cd /usr/sbin
+$ nginx -v
+$ sudo nginx
+
+# 查看是否启动成功
+$ ps -ef | grep nginx
+
+# 重启nginx
+$ cd /usr/sbin
+$ sudo ./nginx -s reload
+
+# 代理配置
+$ cd /etc/nginx
+$ sudo vim nginx.conf
+    server {
+        listen       80;    # 监听端口
+        server_name  flymengfei.com;    # 主机名
+
+        location / {
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-Ip $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_pass http://47.75.76.120:8000;
+        }
 
 
 
