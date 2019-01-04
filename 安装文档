@@ -27,8 +27,6 @@ $ cat /etc/redhat-release
 	* linux：centos7.4
 	* python: python3.6.5
 	* git: git2.20.1
-	* nginx: nginx1.15.3
-	* java: java1.8.0_191
 	* mysql: mysql5.7.23
 	* redis: redis4.0.11
 	* node.js: node-v8.5.0
@@ -90,3 +88,82 @@ $ sudo vi /usr/bin/yum
 将#!/usr/bin/python 改为 #!/usr/bin/python2 
 $ sudo vi /usr/libexec/urlgrabber-ext-down 
 将第一行"#!/usr/bin/python" 改为 "#!/usr/bin/python2"
+
+三.mysql安装
+$ sudo yum -y install make gcc-c++ cmake bison-devel ncurses-devel libaio libaio-devel
+
+# 创建用户组及用户（root下）
+# groupadd mysql
+# useradd mysql -g mysql 	-- useradd mysql[用户名] -g mysql[用户组]
+
+$ wget http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-5.7/mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz
+$ tar -zxvf mysql-5.7.23-linux-glibc2.12-x86_64.tar.gz
+$ sudo mv mysql-5.7.23-linux-glibc2.12-x86_64 /usr/local/mysql
+
+# 配置权限（root下）
+# cd /usr/local/mysql
+# ls
+# mkdir data
+# cd ..
+# ll
+# chown -R mysql:mysql mysql/ 
+# chmod -R 755 mysql/ 
+
+# 编译安装并初始化mysql，记住末尾初始密码
+# /usr/local/mysql/bin/mysqld --initialize --user=mysql --datadir=/usr/local/mysql/data --basedir=/usr/local/mysql
+
+Starting MySQL ** mysqld_safe Directory '/var/lib/mysql' for UNIX socket file don't exists（需要mv /etc/my.cnf /etc/my.cnf.bak，否则会报这个错误）
+# cat /etc/my.cnf
+# mv /etc/my.cnf /etc/my.cnf.bak
+
+# 启动mysql
+# /usr/local/mysql/support-files/mysql.server start
+
+# 建立软链接
+# ln -s /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql 
+# ln -s /usr/local/mysql/bin/mysql /usr/bin
+
+# 重启mysql
+# service mysql restart
+
+# 修改密码（输入前面的初始密码）
+# mysql -u root -p
+mysql> alter user 'root'@'localhost' identified by '123456';
+mysql> use mysql;
+mysql> update user set user.Host='%' where user.User='root';
+mysql> flush privileges;
+mysql> create database if not exists hbi default charset utf8 collate utf8_general_ci;
+mysql> quit;
+
+
+编辑my.cnf，添加配置文件（新建）
+# vim /usr/local/mysql/my.cnf 
+[mysqld] 
+port = 3306 
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+
+四.redis安装
+$ wget http://download.redis.io/releases/redis-5.0.3.tar.gz 
+$ tar -zxvf redis-5.0.3.tar.gz -C ~/app
+$ cd redis-5.0.3
+$ make
+$ sudo make install
+
+# 启动redis服务器（redis-server）
+$ nohup redis-server >/dev/null 2>&1 &
+
+# 打开redis客户端
+$ redis-cli -h 127.0.0.1 -p 6379
+> set hello world
+> get hello
+> del hello
+> exit
+
+
+
+
+
+
+
+
+
