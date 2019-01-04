@@ -1,0 +1,21 @@
+hbi平台搭建
+
+在阿里云上购买云服务器和域名
+
+环境参数
+  * linux：centos7.4
+	* python: python3.6.5
+  * git: git2.20.1
+	* nginx: nginx1.15.3
+	* java: java1.8.0_191
+	* mysql: mysql5.7.23
+	* redis: redis4.0.11
+	* centos: centos6.4
+	* node.js: node-v8.5.0
+  
+1.git安装
+$ wget https://github.com/git/git/archive/v2.20.1.zip 
+$ sudo yum -y install zlib-devel openssl-devel cpio expat-devel gettext-devel curl-devel perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
+
+$ sudo yum -y install unzip 
+$ unzip v2.20.1.zip -C ~/app
