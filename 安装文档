@@ -28,7 +28,7 @@ $ cat /etc/redhat-release
 	* python: python3.6.5
 	* git: git2.20.1
 	* mysql: mysql5.7.23
-	* redis: redis4.0.11
+	* redis: redis5.0.3
 	* node.js: node-v8.5.0
   
 一.git安装
