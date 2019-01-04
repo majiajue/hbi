@@ -1,0 +1,8 @@
+更新pip
+$ sudo pip install --upgrade pip
+
+安装虚拟环境包pipenv
+$ sudo pip install pipenv
+
+
+$ 
