@@ -10,7 +10,7 @@ class BaseSetting(object):
 
 class GlobalSettings(object):
     site_title = "HBI数据平台"
-    site_footer = "同程艺龙"
+    site_footer = "flymengfei.com"
     menu_style = "accordion"
 
 xadmin.site.register(views.BaseAdminView, BaseSetting)
