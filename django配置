@@ -23,3 +23,5 @@ $ python manage.py runserver 0:8000
 
 创建一个管理员账号
 $ python manage.py createsuperuser
+
+$ nohup python manage.py runserver 0:8000 >/dev/null 2>&1 &
