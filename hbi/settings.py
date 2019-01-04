@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import pymysql
 pymysql.install_as_MySQLdb()
 
-from ._ldap import *
+# from ._ldap import *
 
 import os
 import sys
