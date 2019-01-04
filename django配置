@@ -4,5 +4,11 @@ $ sudo pip install --upgrade pip
 安装虚拟环境包pipenv
 $ sudo pip install pipenv
 
+如果pipenv shell报错找不到pipenv
+$ sudo ln -s ~/app/conda3/bin/pipenv /usr/bin/pipenv
 
-$ 
+安装虚拟环境
+$ cd hbi
+$ pipenv shell
+
+$ pip list
