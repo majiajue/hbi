@@ -1,21 +1,92 @@
 hbi平台搭建
 
 在阿里云上购买云服务器和域名
+1.添加新用户
+# useradd fei.meng
+# passwd fei.meng
+# su fei.meng	-- 切换
+# userdel -r fei.meng	-- 删除
+
+在root下增加普通用户权限
+# vi /etc/sudoers
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL		（"yyp"复制这一行粘贴到下一行） 
+fei.meng    ALL=(ALL)   PASSWD:ALL		(敲击键盘Esc键，输入wq!)
+
+2.新建相关目录
+$ mkdir app data soft hbi
+	* app：软件安装目录
+	* data：数据存放目录
+	* soft：安装包存放目录
+	* hbi：平台环境目录
+
+3.查看当前系统版本
+$ cat /etc/redhat-release
 
 环境参数
-  * linux：centos7.4
+	* linux：centos7.4
 	* python: python3.6.5
-  * git: git2.20.1
+	* git: git2.20.1
 	* nginx: nginx1.15.3
 	* java: java1.8.0_191
 	* mysql: mysql5.7.23
 	* redis: redis4.0.11
-	* centos: centos6.4
 	* node.js: node-v8.5.0
   
-1.git安装
+一.git安装
 $ wget https://github.com/git/git/archive/v2.20.1.zip 
 $ sudo yum -y install zlib-devel openssl-devel cpio expat-devel gettext-devel curl-devel perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
 
 $ sudo yum -y install unzip 
-$ unzip v2.20.1.zip -C ~/app
+$ unzip v2.20.1.zip
+
+# 编译安装 
+$ cd git-2.20.1 
+$ make prefix=/usr/local all 
+$ sudo make prefix=/usr/local install 
+
+# 验证是否安装成功
+$ git --version
+
+# 创建SSH Key（换成自己的邮箱地址，不需要输入任何东西，直接enter跳过） 
+$ ssh-keygen -t rsa -C "fly.mengfei@gmail.com"
+
+查看id_rsa.pub，登录GitLab，Settings -> SSH Keys：输入id_rsa.pub文件的内容，填写任意Title
+$ cd .ssh 
+$ cat id_rsa.pub 
+登陆GitHub，打开“Account Settings”-->“SSH and GPG keys”-->“New SSH key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：点“Add SSH key”
+
+git用户名和地址配置（--global参数，用了这个参数，表示你服务器上所有的Git仓库都会使用这个配置）
+$ git config --global user.name "mengfei" 
+$ git config --global user.email "fly.mengfei@gmail.com"
+
+二.python3安装
+1.anaconda3安装
+$ cd soft
+$ wget https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+$ cd ~/app
+$ bash ~/soft/Anaconda3-5.2.0-Linux-x86_64.sh
+[/home/fei.meng/anaconda3] >>> conda3
+PREFIX=/home/fei.meng/app/conda3
+
+报错：bunzip2: command not found
+$ sudo yum install -y bzip2
+
+2.设置环境变量
+$ vi ~/.bashrc 
+# python3 
+export PATH=/home/fei.meng/conda3/bin:$PATH 
+$ source ~/.bashrc
+
+3.建立python3软链接（后面一项是快捷方式）
+$ file /usr/bin/python 
+$ which python2 
+$ which python3 
+$ sudo mv /usr/bin/python /usr/bin/python_bk 
+$ sudo ln -s ~/app/conda3/bin/python3 /usr/bin/python
+
+centos7 yum配置文件更改
+$ sudo vi /usr/bin/yum 
+将#!/usr/bin/python 改为 #!/usr/bin/python2 
+$ sudo vi /usr/libexec/urlgrabber-ext-down 
+将第一行"#!/usr/bin/python" 改为 "#!/usr/bin/python2"
